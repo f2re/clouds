@@ -1,7 +1,7 @@
 <template lang="pug">
   v-app
     
-    v-navigation-drawer( fixed :color="themecolor" permanent floating)
+    v-navigation-drawer( class="pa-4" fixed :color="themecolor" permanent floating)
       v-list-item
         v-list-item-content
           v-list-item-title( :class="themecolor+'--text'" class="text--lighten-5" ) Справочник ТСМ
@@ -49,7 +49,7 @@ export default {
   data: () => ({
     
     // variable of theme color
-    themecolor: "indigo",
+    themecolor: "teal",
     // menu
     menu:[
       { "title": 'Главная',

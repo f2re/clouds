@@ -57,10 +57,10 @@ export default {
         "icon" : "mdi-home" },
       { "title": 'Разделы',
         "href" : '/navigation',
-        "icon" : "mdi-bookmarks" },
+        "icon" : "mdi-book-multiple" },
       { "title": 'Список ТСМ',
         "href" : '/list',
-        "icon" : "mdi-info" },
+        "icon" : "mdi-view-list" },
     ]
 
   }),

@@ -2,71 +2,52 @@
 package main
 
 import (
-	"database/sql"
+	// "database/sql"
 	"./handlers"
+	"./models"
 
 	"github.com/labstack/echo"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 
 
-
 func main() {
 
-	db := initDB("tcmstorage.db")
-	migrate(db)
+	db, err := gorm.Open("sqlite3", "db/tcmstorage.db")
+	if err != nil {
+		panic("failed to connect database")
+	}
+	defer db.Close()
+
+	// var Item models.Item
+	// Миграция схем
+	db.AutoMigrate(&models.Item{},&models.Category{},&models.Tabel{},&models.Image{})
+	
 
 	// Create a new instance of Echo
 	e := echo.New()
 
-	e.File("/", "public/index.html")
+	e.File("/", "../web/public/index.html")
+	e.Static("/js", "../web/public/js")
+	e.Static("/css", "../web/public/css")
+	e.Static("/img", "../web/public/img")
+	e.Static("/uploads", "../web/public/uploads")
 
+	// работаем с техникой
 	e.GET("/api/items", handlers.GetItems(db))
-    e.PUT("/api/items", handlers.PutItem(db))
-    e.DELETE("/api/items/:id", handlers.DeleteItem(db))
+    e.POST("/api/items", handlers.SaveItem(db))
+    e.PUT("/api/items/:id", handlers.UpdateItem(db))
+	e.DELETE("/api/items/:id", handlers.DeleteItem(db))
+	
+	// работаем с категориями
+	e.GET("/api/categories", handlers.GetCategories(db))
+	e.POST("/api/categories", handlers.SaveCategories(db))
+    e.PUT("/api/categories/:id", handlers.UpdateCategories(db))
+	e.DELETE("/api/categories/:id", handlers.DeleteCategories(db))
 
 	// Start as a web server
 	e.Logger.Fatal(e.Start(":8000"))
 }
 
-func initDB(filepath string) *sql.DB {
-	db, err := sql.Open("sqlite3", filepath)
-
-	// Here we check for any db errors then exit
-	if err != nil {
-		panic(err)
-	}
-
-	// If we don't get any errors but somehow still don't get a db connection
-	// we exit as well
-	if db == nil {
-		panic("db nil")
-	}
-	return db
-}
-
-func migrate(db *sql.DB) {
-	sql := `
-    CREATE TABLE IF NOT EXISTS items(
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-        name VARCHAR NOT NULL
-    );
-    `
-
-	_, err := db.Exec(sql)
-	// Exit if something goes wrong with our SQL statement above
-	if err != nil {
-		panic(err)
-	}
-}

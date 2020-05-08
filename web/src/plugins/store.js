@@ -9,6 +9,8 @@ export default new Vuex.Store({
     state: {
         // variable of theme color
         themecolor: "teal",
+        // accent color
+        themeaccentcolor: "orange",
     },
     mutations: {
       increment (state) {

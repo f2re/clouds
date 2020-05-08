@@ -1,9 +1,15 @@
 package handlers
 
 import (
+	"os"
+	"io"
+	// "io/ioutil"
 	"github.com/jinzhu/gorm"
+	"path/filepath"
+	"strconv"
+	"time"
+	"github.com/gosimple/slug"
 	"net/http"
-	// "strconv"
 
 	"../models"
 
@@ -24,21 +30,72 @@ func GetItems(db *gorm.DB) echo.HandlerFunc {
 func SaveItem(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// Instantiate a new Item
-		var Item models.Item
-		// Map imcoming JSON body to the new Item
-        c.Bind(&Item)
-        return nil
-		// Add a Item using our new model
-		// id, err := models.PutItem(db, Item.Name)
-		// // Return a JSON response if successful
-		// if err == nil {
-		// 	return c.JSON(http.StatusCreated, H{
-		// 		"created": id,
-		// 	})
-		// 	// Handle any errors
-		// } else {
-		// 	return err
-		// }
+		// var Item models.Item
+		//-----------
+		// Read file
+		//-----------
+		img,  err := c.FormFile("Image")
+
+		if err != nil {
+			return err
+		}
+		src, err := img.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+
+		// Destination
+		crutime := time.Now().Unix()
+		path := "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
+		dst, err := os.Create( "../web/dist"+path )
+
+		if err != nil {
+			return err
+		}
+		defer dst.Close()
+
+		// Copy
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+
+		name := c.FormValue("name")
+		// category := c.FormValue("category")
+		index := c.FormValue("index")
+		snabjenie := c.FormValue("snabjenie")
+		kvt := c.FormValue("kvt")
+		nomenklature := c.FormValue("nomenklature")
+		dovorgan := c.FormValue("dovorgan")
+		reqorgan := c.FormValue("reqorgan")
+		explorgan := c.FormValue("explorgan")
+		creator := c.FormValue("creator")
+		description := c.FormValue("description")
+		destination := c.FormValue("destination")
+		composition := c.FormValue("composition")
+		tth := c.FormValue("tth")
+		// tabel := c.FormValue("tabel")
+
+		db.Create(&models.Item{ 
+			Name: name, 
+			Slug: slug.Make(name),
+			// Category: category,
+			Index: index,
+			Snabjenie: snabjenie,
+			KVT: kvt,
+			Nomenklature: nomenklature,
+			Dovorgan: dovorgan,
+			Reqorgan: reqorgan,
+			Explorgan: explorgan,
+			Creator: creator,
+			Description: description,
+			Destination: destination,
+			Composition: composition,
+			TTH: tth,
+			Image: models.Image{Path:path},
+			// Tabel: tabel,
+		})
+		return c.String(http.StatusOK, name+" user successfully created")
 	}
 }
 

@@ -18,6 +18,16 @@
         v-footer( dark padless absolute  )
           v-card( flat tile width="100%" :color="$store.state.themecolor" class="text-center"   )
             
+            v-btn(  to="/item/add"
+                    dark
+                    :color="$store.state.themeaccentcolor"
+                    class="accent-4"
+                    absolute
+                    top
+                    right
+                    fab)
+              v-icon mdi-plus
+                
             v-divider
             
             v-card-text( class="white--text" )        

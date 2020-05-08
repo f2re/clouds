@@ -7,6 +7,7 @@ import (
 	"./models"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -29,17 +30,22 @@ func main() {
 	// Create a new instance of Echo
 	e := echo.New()
 
-	e.File("/", "../web/public/index.html")
-	e.Static("/js", "../web/public/js")
-	e.Static("/css", "../web/public/css")
-	e.Static("/img", "../web/public/img")
-	e.Static("/uploads", "../web/public/uploads")
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:8080", "http://localhost:8000"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	  }))
+
+	e.File("/", "../web/dist/index.html")
+	e.Static("/js", "../web/dist/js")
+	e.Static("/css", "../web/dist/css")
+	e.Static("/img", "../web/dist/img")
+	e.Static("/uploads", "../web/dist/uploads")
 
 	// работаем с техникой
 	e.GET("/api/items", handlers.GetItems(db))
     e.POST("/api/items", handlers.SaveItem(db))
     e.PUT("/api/items/:id", handlers.UpdateItem(db))
-	e.DELETE("/api/items/:id", handlers.DeleteItem(db))
+	e.DELETE("/api/items/:id", handlers.DeleteItem(db)) 
 	
 	// работаем с категориями
 	e.GET("/api/categories", handlers.GetCategories(db))

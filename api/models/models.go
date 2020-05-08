@@ -15,7 +15,7 @@ type Item struct {
 	KVT string `gorm:"index:kvt"` // код КВТ
 	Nomenklature string `gorm:"index:nomenklature"` // номенклатурный номер
 	Dovorgan string   // довольствующий орган
-	reqorgan string  // заказывающий орган
+	Reqorgan string  // заказывающий орган
 	Explorgan string  // эксплуатирующий орган
 	Creator string  // изготовитель
 	Description string  // описание
@@ -23,7 +23,7 @@ type Item struct {
 	Composition string  // состав
 	TTH string  // ТТХ
 	Tabel Tabel `gorm:"foreignkey:TabelID"`// нормы табелизации
-	Images []Image // фотография
+	Image Image `gorm:"foreignkey:ImageRefer"`// фотография
 }
 
 // нормы табелизации
@@ -55,5 +55,5 @@ type Image struct {
 	Name string 
 	Path string 
 	// внешний ключ
-	ItemID uint
+	ImageRefer uint
 }

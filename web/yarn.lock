@@ -850,6 +850,23 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
+"@nativescript/core@6.5.1":
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/@nativescript/core/-/core-6.5.1.tgz#dfa03a11f92953513ae5651534bcf92f9fcae388"
+  integrity sha512-+kxCLIKSw8mTMVnBf2oBy9Q0DR0ptbyUICyL744AVmOdOsvoQmngmBZZpgnbrZO6wwbeC6yixtK6Hq9KHx1YkA==
+  dependencies:
+    css-tree "^1.0.0-alpha.37"
+    nativescript-hook "0.2.5"
+    reduce-css-calc "^2.1.6"
+    semver "6.3.0"
+    tns-core-modules-widgets "6.5.0"
+    tslib "1.10.0"
+
+"@nativescript/theme@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@nativescript/theme/-/theme-2.3.3.tgz#2584d03687831a2c13b9136af5c9456c37df8a9c"
+  integrity sha512-fWn9qTCWJSaN3REX23Fb4N5X2IGNh+RbvzS3b3/ib0KeXrrhovOzBBxoP9db7kgJ5/FUtyBqbvB4xzxE+1z2nQ==
+
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
@@ -2735,13 +2752,18 @@ css-tree@1.0.0-alpha.37:
     mdn-data "2.0.4"
     source-map "^0.6.1"
 
-css-tree@1.0.0-alpha.39:
+css-tree@1.0.0-alpha.39, css-tree@^1.0.0-alpha.37:
   version "1.0.0-alpha.39"
   resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha.39.tgz#2bff3ffe1bb3f776cf7eefd91ee5cba77a149eeb"
   integrity sha512-7UvkEYgBAHRG9Nt980lYxjsTrCyHFN53ky3wVsDkiMdVqylqRt+Zc+jm5qw7/qyOvN2dHSYtX0e4MbCCExSvnA==
   dependencies:
     mdn-data "2.0.6"
     source-map "^0.6.1"
+
+css-unit-converter@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/css-unit-converter/-/css-unit-converter-1.1.1.tgz#d9b9281adcfd8ced935bdbaba83786897f64e996"
+  integrity sha1-2bkoGtz9jO2TW9urqDeGiX9k6ZY=
 
 css-what@2.1:
   version "2.1.3"
@@ -3975,6 +3997,17 @@ glob-to-regexp@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.3.0.tgz#8c5a1494d2066c570cc3bfe4496175acc4d502ab"
   integrity sha1-jFoUlNIGbFcMw7/kSWF1rMTVAqs=
+
+glob@^6.0.1:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-6.0.4.tgz#0f08860f6a155127b2fadd4f9ce24b1aab6e4d22"
+  integrity sha1-DwiGD2oVUSey+t1PnOJLGqtuTSI=
+  dependencies:
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "2 || 3"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
 
 glob@^7.0.0, glob@^7.0.3, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4:
   version "7.1.6"
@@ -5385,7 +5418,7 @@ minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo=
 
-minimatch@^3.0.4:
+"minimatch@2 || 3", minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
@@ -5531,6 +5564,26 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+nativescript-hook@0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/nativescript-hook/-/nativescript-hook-0.2.5.tgz#ea85179ada2d619dcadc9dc32ec45bb5a3c6713e"
+  integrity sha512-ciGJtNbtMB2lGv8jAkUripkRjd3g8atX9VYPSt6e8PI6YPiOKeoma3xjcXoW66pFMYpHnfrbp6Mq9U/QtiQrVg==
+  dependencies:
+    glob "^6.0.1"
+    mkdirp "^0.5.1"
+
+nativescript-sqlite@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/nativescript-sqlite/-/nativescript-sqlite-2.6.1.tgz#738fbcba777c5667925e329b237f79de582719c8"
+  integrity sha512-AGKcih90PVnPb/+9mwK6phHSFAjGFDfkhrqTdi0XoYpeZdAGhdshLNnKXd4n8616558H/RddKvpE5wO1WYc9qA==
+
+nativescript-vue@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/nativescript-vue/-/nativescript-vue-2.6.1.tgz#144eaa6c351e054c2d25da374b0ac6344d40ddcd"
+  integrity sha512-c6SuQD2qwnt0ZYEFT8ZLiXxUHOe7raMn7jGf691ztx9DydO9NqFXcoDdUA3nI/QymhMpeig44TpWoA7MUGrkBw==
+  dependencies:
+    nativescript-hook "0.2.5"
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -6530,7 +6583,7 @@ postcss-unique-selectors@^4.0.1:
     postcss "^7.0.0"
     uniqs "^2.0.0"
 
-postcss-value-parser@^3.0.0:
+postcss-value-parser@^3.0.0, postcss-value-parser@^3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-3.3.1.tgz#9ff822547e2893213cf1c30efa51ac5fd1ba8281"
   integrity sha512-pISE66AbVkp4fDQ7VHBwRNXzAAKJjw4Vw7nWI/+Q3vuly7SNfgYXvm6i5IgFylHGK5sP/xHAbB7N49OS4gWNyQ==
@@ -6914,6 +6967,14 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
+reduce-css-calc@^2.1.6:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/reduce-css-calc/-/reduce-css-calc-2.1.7.tgz#1ace2e02c286d78abcd01fd92bfe8097ab0602c2"
+  integrity sha512-fDnlZ+AybAS3C7Q9xDq5y8A2z+lT63zLbynew/lur/IR24OQF5x98tfNwf79mzEdfywZ0a2wpM860FhFfMxZlA==
+  dependencies:
+    css-unit-converter "^1.1.1"
+    postcss-value-parser "^3.3.0"
+
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.2.0.tgz#e5de7111d655e7ba60c057dbe9ff37c87e65cdec"
@@ -7279,15 +7340,15 @@ selfsigned@^1.10.7:
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
   integrity sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
 
+semver@6.3.0, semver@^6.0.0, semver@^6.1.0, semver@^6.1.2, semver@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
+  integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
+
 semver@7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.0.0.tgz#5f3ca35761e47e05b206c6daff2cf814f0316b8e"
   integrity sha512-+GB6zVA9LWh6zovYQLALHwv5rb2PHGlJi3lfiqIHxR0uuwCgefcOJc59v9fv1w8GbStwxuuqqAjI9NMAOOgq1A==
-
-semver@^6.0.0, semver@^6.1.0, semver@^6.1.2, semver@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
-  integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
 semver@^7.1.2:
   version "7.3.2"
@@ -8026,6 +8087,18 @@ tmp@^0.0.33:
   dependencies:
     os-tmpdir "~1.0.2"
 
+tns-core-modules-widgets@6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/tns-core-modules-widgets/-/tns-core-modules-widgets-6.5.0.tgz#482df5f82fd423a225932b18574ed3e41e928e20"
+  integrity sha512-aSftTLvWZ8jRmM4IttuEd1Y04HlDZNYDLY6e/brt0wcrugihGgxdb3Ia85b8DRP0+WXbNyKitKVHgbCFLiABRw==
+
+tns-core-modules@^6.5.1:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/tns-core-modules/-/tns-core-modules-6.5.1.tgz#c3de7f0d3f61cc6e64ebd4f15be0c89c5eaff1ca"
+  integrity sha512-UVPnCDHdEwyAVCBvEsM3mRobhpdTPMSCLjmBy2m8q1kzo/jUcLYebSMQGev4c9IsRlQhiTRVL1T2sWzTHVpU5g==
+  dependencies:
+    "@nativescript/core" "6.5.1"
+
 to-arraybuffer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"
@@ -8105,6 +8178,11 @@ ts-pnp@^1.1.6:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
+
+tslib@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
+  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
 tslib@^1.9.0:
   version "1.11.2"
@@ -8490,6 +8568,11 @@ vuetify@^2.2.11:
   version "2.2.27"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.2.27.tgz#a28cb6773b7c55cd8e9cedcac06133b886c8eee4"
   integrity sha512-vcCrcoUEdveXgM9BVq5ZWTiWlJZo/J7ZQCpvOD8+VtkrBNbCeTsJAygoGB+6rRDy3TBQqxdCvi42IDNwJVqiJg==
+
+vuex@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.3.0.tgz#665b4630ea1347317139fcc5cb495aab3ec5e513"
+  integrity sha512-1MfcBt+YFd20DPwKe0ThhYm1UEXZya4gVKUvCy7AtS11YAOUR+9a6u4fsv1Rr6ePZCDNxW/M1zuIaswp6nNv8Q==
 
 watchpack@^1.6.1:
   version "1.6.1"

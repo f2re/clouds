@@ -10,6 +10,7 @@ import (
 	"time"
 	"github.com/gosimple/slug"
 	"net/http"
+	"encoding/json"
 
 	"../models"
 
@@ -21,8 +22,17 @@ type H map[string]interface{}
 // GetItems endpoint
 func GetItems(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-        var Item models.Item
-		return c.JSON(http.StatusOK, db.Find(&Item) )
+        var Items []models.Item
+		return c.JSON(http.StatusOK, db.Preload("Tabel").Preload("Image").Find(&Items) )
+	}
+}
+
+// GetItems endpoint
+func GetItem(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var Item models.Item
+		slug := c.Param("slug")
+		return c.JSON(http.StatusOK, db.Preload("Tabel").Preload("Image").Where(&models.Item{ Slug:slug }).First(&Item) )
 	}
 }
 
@@ -74,9 +84,11 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 		destination := c.FormValue("destination")
 		composition := c.FormValue("composition")
 		tth := c.FormValue("tth")
-		// tabel := c.FormValue("tabel")
+		// decode tabel variable
+		var tabel models.Tabel
+		json.Unmarshal([]byte(c.FormValue("tabel")), &tabel)
 
-		db.Create(&models.Item{ 
+		res := db.Create(&models.Item{ 
 			Name: name, 
 			Slug: slug.Make(name),
 			// Category: category,
@@ -93,9 +105,17 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 			Composition: composition,
 			TTH: tth,
 			Image: models.Image{Path:path},
-			// Tabel: tabel,
+			Tabel: tabel,
 		})
-		return c.String(http.StatusOK, name+" user successfully created")
+		if res.Error != nil {
+			errors := res.GetErrors()
+			errstr := ""
+			for _, err := range errors {
+				errstr = errstr+err.Error()
+			}
+			return c.JSON(http.StatusOK, errstr  )
+		}
+		return c.String(http.StatusOK, "OK")
 	}
 }
 

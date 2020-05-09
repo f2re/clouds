@@ -24,14 +24,7 @@ const router = new VueRouter({
     { path: '/list', component: List },
     { path: '/navigation', component: Navigation },
     { path: '/item/add', component: AddItem },
-    { path: '/item', component: Item,
-      children:[
-        {
-          path:'edit',
-          component: Item
-        }
-      ]
-     },
+    { path: '/item/:slug', component: Item },
   ]
 })
 

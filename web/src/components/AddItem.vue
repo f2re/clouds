@@ -106,23 +106,23 @@
                     h2( class="mt-9 mb-5" ) Нормы табелизации
                     v-row
                         v-col
-                            v-text-field( v-model="item.tabel.a" type="number" min=0 step=1 label="Отдельная эскадрилься" )
+                            v-text-field( v-model="item.tabel.Escadrile" type="number" min=0 step=1 label="Отдельная эскадрилься" )
                         v-col
-                            v-text-field( v-model="item.tabel.b" type="number" min=0 step=1 label="Авиационный полк" )
+                            v-text-field( v-model="item.tabel.Polk" type="number" min=0 step=1 label="Авиационный полк" )
                         v-col
-                            v-text-field( v-model="item.tabel.c" type="number" min=0 step=1 label="Ав. дивизия" )
+                            v-text-field( v-model="item.tabel.Division" type="number" min=0 step=1 label="Ав. дивизия" )
                         v-col
-                            v-text-field( v-model="item.tabel.d" type="number" min=0 step=1 label="А ВВС и ПВО" )
+                            v-text-field( v-model="item.tabel.Army" type="number" min=0 step=1 label="А ВВС и ПВО" )
                         v-col
-                            v-text-field( v-model="item.tabel.e" type="number" min=0 step=1 label="Учебно авиационный центр" )
+                            v-text-field( v-model="item.tabel.Center" type="number" min=0 step=1 label="Учебно авиационный центр" )
                         v-col
-                            v-text-field( v-model="item.tabel.f" type="number" min=0 step=1 label="ЦУ вида/рода" )
+                            v-text-field( v-model="item.tabel.CY" type="number" min=0 step=1 label="ЦУ вида/рода" )
                         v-col
-                            v-text-field( v-model="item.tabel.g" type="number" min=0 step=1 label="Межвидовой полигон" )
+                            v-text-field( v-model="item.tabel.Polygon" type="number" min=0 step=1 label="Межвидовой полигон" )
                         v-col
-                            v-text-field( v-model="item.tabel.h" type="number" min=0 step=1 label="Aв. комендатура" )
+                            v-text-field( v-model="item.tabel.Komend" type="number" min=0 step=1 label="Aв. комендатура" )
                         v-col
-                            v-text-field( v-model="item.tabel.k" type="number" min=0 step=1 label="Учебное заведение" )
+                            v-text-field( v-model="item.tabel.School" type="number" min=0 step=1 label="Учебное заведение" )
             v-card-actions(  )
                 v-spacer
                 v-btn( @click="reset" ) Очистить
@@ -168,15 +168,15 @@
                  value:'200'},
             ],
             tabel       : {
-                a:0,
-                b:0,
-                c:0,
-                d:0,
-                e:0,
-                f:0,
-                g:0,
-                h:0,
-                k:0,
+                Escadrile :0,
+                Polk :0,
+                Division :0,
+                Army :0,
+                Center :0,
+                CY :0,
+                Polygon :0,
+                Komend :0,
+                School :0,
             },
             images      : '',
         },

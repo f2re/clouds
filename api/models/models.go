@@ -9,7 +9,7 @@ type Item struct {
 	gorm.Model
 	Name string `gorm:"index:name"` // название изделия
 	Slug string  `gorm:"index;unique;not null"`// строка адреса
-	Category Category `gorm:"foreignkey:CategoryID"` // категория техники
+	Category Category `gorm:"foreignkey:ID"` // категория техники
 	Index string `gorm:"index:indx"` // индекс иделия
 	Snabjenie string // принят на снабжение
 	KVT string `gorm:"index:kvt"` // код КВТ
@@ -22,24 +22,25 @@ type Item struct {
 	Destination string  // назначение
 	Composition string  // состав
 	TTH string  // ТТХ
-	Tabel Tabel `gorm:"foreignkey:TabelID"`// нормы табелизации
-	Image Image `gorm:"foreignkey:ImageRefer"`// фотография
+	Tabel Tabel `gorm:"foreignkey:ID"`// нормы табелизации
+	Image Image `gorm:"foreignkey:ID"`// фотография
 }
+
 
 // нормы табелизации
 type Tabel struct {
 	gorm.Model
-	Escadrile uint // отдельная эскадрилься
-	Polk uint // авиационный полк
-	Division uint // ав. дивизия
-	Army uint // А ВВС
-	Center uint // учебно авиационный центр
-	CY uint // ЦУ вида/рода
-	Polygon uint // межвидовой полигон
-	Komend uint // ав. комендатура
-	School uint // учебное заведение
+	Escadrile uint `json:",string"`// отдельная эскадрилься
+	Polk uint `json:",string"`// авиационный полк
+	Division uint `json:",string"`// ав. дивизия
+	Army uint `json:",string"`// А ВВС
+	Center uint `json:",string"`// учебно авиационный центр
+	CY uint `json:",string"`// ЦУ вида/рода
+	Polygon uint `json:",string"`// межвидовой полигон
+	Komend uint `json:",string"`// ав. комендатура
+	School uint `json:",string"`// учебное заведение
 	// внешний ключ
-	ItemID uint
+	// ItemID uint
 }
 
 // Category категория техники
@@ -55,5 +56,5 @@ type Image struct {
 	Name string 
 	Path string 
 	// внешний ключ
-	ImageRefer uint
+	// ImageRefer uint
 }

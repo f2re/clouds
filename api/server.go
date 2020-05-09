@@ -43,6 +43,7 @@ func main() {
 
 	// работаем с техникой
 	e.GET("/api/items", handlers.GetItems(db))
+	e.GET("/api/item/:slug", handlers.GetItem(db))
     e.POST("/api/items", handlers.SaveItem(db))
     e.PUT("/api/items/:id", handlers.UpdateItem(db))
 	e.DELETE("/api/items/:id", handlers.DeleteItem(db)) 

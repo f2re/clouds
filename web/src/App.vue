@@ -35,7 +35,7 @@
 
     v-content
       transition(name="fade")
-        router-view
+        router-view(:key="$route.fullPath")
     
         
 </template>

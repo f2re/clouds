@@ -11,6 +11,8 @@ export default new Vuex.Store({
         themecolor: "teal",
         // accent color
         themeaccentcolor: "orange",
+        // local address prefix
+        addressprefix:'http://localhost:8000',
     },
     mutations: {
       increment (state) {

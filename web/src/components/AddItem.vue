@@ -216,7 +216,7 @@
                 _data.append( 'tth', JSON.stringify(this.item.tth) );
                 _data.append( 'tabel', JSON.stringify(this.item.tabel) );
 
-                axios.post( 'http://localhost:8000/api/items', _data )
+                axios.post( this.$store.state.addressprefix+'/api/items', _data )
                      .then( res=>console.log(res) )
             }
         },

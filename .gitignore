@@ -1,1 +1,3 @@
 tcm.code-workspace
+*.db
+api/db

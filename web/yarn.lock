@@ -5216,6 +5216,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+make-dir-webpack-plugin@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/make-dir-webpack-plugin/-/make-dir-webpack-plugin-0.1.0.tgz#3b796112c42e0f3e81c44a5ae52cde392b4a1153"
+  integrity sha1-O3lhEsQuDz6BxEpa5SzeOStKEVM=
+
 make-dir@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-2.1.0.tgz#5f0310e18b8be898cc07009295a30ae41e91e6f5"

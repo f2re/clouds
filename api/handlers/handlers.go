@@ -36,6 +36,16 @@ func GetItem(db *gorm.DB) echo.HandlerFunc {
 	}
 }
 
+// GetItems endpoint
+func SearchItems(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var Items []models.Item
+		q := c.Param("q")
+		return c.JSON(http.StatusOK, db.Preload("Tabel").Preload("Image").Where("name LIKE ?", "%"+q+"%").Find(&Items) )
+	}
+}
+
+
 // PutItem endpoint
 func SaveItem(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {

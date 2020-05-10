@@ -39,11 +39,11 @@ func main() {
 	  }))
 
 	
-	e.Static("/js", "../web/dist/js")
-	e.Static("/css", "../web/dist/css")
-	e.Static("/img", "../web/dist/img")
-	e.Static("/uploads", "../web/dist/uploads")
-	e.Static("/fonts", "../web/dist/fonts")
+	e.Static("/js", "web/dist/js")
+	e.Static("/css", "web/dist/css")
+	e.Static("/img", "web/dist/img")
+	e.Static("/uploads", "web/dist/uploads")
+	e.Static("/fonts", "web/dist/fonts")
 
 	// работаем с техникой
 	e.GET("/api/items", handlers.GetItems(db))
@@ -59,7 +59,7 @@ func main() {
     e.PUT("/api/categories/:id", handlers.UpdateCategories(db))
 	e.DELETE("/api/categories/:id", handlers.DeleteCategories(db))
 
-	e.File("/*", "../web/dist/index.html")
+	e.File("/*", "web/dist/index.html")
 	
 	openbrowser("http://localhost:8000")
 	// Start as a web server

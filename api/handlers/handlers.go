@@ -68,7 +68,7 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 		// Destination
 		crutime := time.Now().Unix()
 		path := "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
-		dst, err := os.Create( "../web/dist"+path )
+		dst, err := os.Create( "web/dist"+path )
 
 		if err != nil {
 			return err

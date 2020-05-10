@@ -11,17 +11,17 @@ type Item struct {
 	Slug string  `gorm:"index;unique;not null"`// строка адреса
 	Category Category `gorm:"foreignkey:ID"` // категория техники
 	Index string `gorm:"index:indx"` // индекс иделия
-	Snabjenie string // принят на снабжение
+	Snabjenie string `gorm:"type:text"`// принят на снабжение
 	KVT string `gorm:"index:kvt"` // код КВТ
 	Nomenklature string `gorm:"index:nomenklature"` // номенклатурный номер
-	Dovorgan string   // довольствующий орган
-	Reqorgan string  // заказывающий орган
-	Explorgan string  // эксплуатирующий орган
-	Creator string  // изготовитель
-	Description string  // описание
-	Destination string  // назначение
-	Composition string  // состав
-	TTH string  // ТТХ
+	Dovorgan string  `gorm:"type:text"` // довольствующий орган
+	Reqorgan string `gorm:"type:text"`// заказывающий орган
+	Explorgan string `gorm:"type:text"` // эксплуатирующий орган
+	Creator string  `gorm:"type:text"` // изготовитель
+	Description string `gorm:"type:text"` // описание
+	Destination string `gorm:"type:text"` // назначение
+	Composition string `gorm:"type:text"` // состав
+	TTH string `gorm:"type:text"` // ТТХ
 	Tabel Tabel `gorm:"foreignkey:ID"`// нормы табелизации
 	Image Image `gorm:"foreignkey:ID"`// фотография
 }

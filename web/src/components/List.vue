@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-container( :class="$store.state.themecolor+' lighten-5'" dark fluid height )
+  v-container( :class="$store.state.themecolor+' lighten-5 vh-100'" dark fluid height )
     //- Заголовок
     vue-headful( title="Список технических средств" )
 
@@ -58,6 +58,6 @@
 
 <style scoped>
   .vh-100{
-    height: 100%;
+    min-height: 100vh;
   }
 </style>

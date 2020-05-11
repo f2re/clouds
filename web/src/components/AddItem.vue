@@ -8,7 +8,7 @@
         v-card( :loading="loading" :disabled="loading" class="mb-7 "   )
             div( class="d-flex align-center justify-center grey theme--light lighten-3 item-placeholder-img relative " )
                 //- image uploaded
-                v-img( v-if="item.image!=''" :src="item.image" )
+                v-img( v-if="item.image!=''" :src="$store.state.addressprefix+item.image" )
                 //- image placeholder
                 div(v-if="item.image==''")
                     v-icon( size="84px") mdi-image
@@ -104,7 +104,7 @@
 
                     //- нормы табелизации
                     h2( class="mt-9 mb-5" ) Нормы табелизации
-                    v-row
+                    v-row(v-if="typeof item.tabel !=='undefined'")
                         v-col
                             v-text-field( v-model="item.tabel.Escadrile" type="number" min=0 step=1 label="Отдельная эскадрилься" )
                         v-col
@@ -129,7 +129,11 @@
                 v-btn( @click="submit" :dark="valid" :color="$store.state.themecolor" :disabled="!valid" ) Сохранить
                     v-icon(class="ml-5") mdi-content-save
             
-        
+    v-bottom-sheet(v-model="popup")
+        v-sheet(class="text-center" height="200px")
+            v-btn( @click="popup= !popup" text class="mt-6" :color="popup_style" ) Закрыть
+            div(class="my-3") {{popup_text}}
+            
 </template>
 
 <script>
@@ -148,38 +152,13 @@
             v => !!v || 'Заполните поле',
         ],
         // item
-        item:{
-            image       : '',
-            name        : '',
-            category    : '',
-            index       : '',
-            snabjenie   : '',
-            kvt         : '',
-            nomenklature: '',
-            dovorgan    : '',
-            reqorgan    : '',
-            explorgan   : '',
-            creator     : '',
-            description : '',
-            destination : '',
-            composition : '',
-            tth         : [
-                {label:'Объем ГМИ поступающей в сутки, МБайт',
-                 value:'200'},
-            ],
-            tabel       : {
-                Escadrile :0,
-                Polk :0,
-                Division :0,
-                Army :0,
-                Center :0,
-                CY :0,
-                Polygon :0,
-                Komend :0,
-                School :0,
-            },
-            images      : '',
-        },
+        item:{},
+        // info popup
+        popup: false,
+        // style
+        popup_style:'error',
+        // text
+        popup_text:''
     }),
 
     methods:{
@@ -199,7 +178,9 @@
             console.log(this.item.image);
             if ( this.valid ){
                 let _data = new FormData();
-                _data.append( 'Image', this.$refs.img.files[0] );
+                if( this.$refs.img.files[0] ){
+                    _data.append( 'Image', this.$refs.img.files[0] );
+                }
                 _data.append( 'name', this.item.name );
                 _data.append( 'category', this.item.category );
                 _data.append( 'index', this.item.index );
@@ -217,7 +198,53 @@
                 _data.append( 'tabel', JSON.stringify(this.item.tabel) );
 
                 axios.post( this.$store.state.addressprefix+'/api/items', _data )
-                     .then( res=>console.log(res) )
+                     .then( ()=>{
+                        this.popup = true;
+                        this.popup_style = 'success';
+                        this.popup_text = 'Изделие добавлено. Можно перейти к просмотру';
+                        // console.log(res);
+                        this.resetData();
+                     })
+                     .catch(error => {
+                        console.log(error.response)
+                        this.popup = true;
+                        this.popup_style = 'error';
+                        this.popup_text = 'Ошибка добавления "'+error.response.data+'"';
+                     });
+            }
+        },
+        resetData(){
+            this.item = {
+                image       : '',
+                name        : '',
+                category    : '',
+                index       : '',
+                snabjenie   : '',
+                kvt         : '',
+                nomenklature: '',
+                dovorgan    : '',
+                reqorgan    : '',
+                explorgan   : '',
+                creator     : '',
+                description : '',
+                destination : '',
+                composition : '',
+                tth         : [
+                    {label:'Объем ГМИ поступающей в сутки, МБайт',
+                    value:'200'},
+                ],
+                tabel       : {
+                    Escadrile :0,
+                    Polk :0,
+                    Division :0,
+                    Army :0,
+                    Center :0,
+                    CY :0,
+                    Polygon :0,
+                    Komend :0,
+                    School :0,
+                },
+                images      : '',
             }
         },
         // upload image
@@ -227,6 +254,11 @@
             this.item.image = URL.createObjectURL(this.$refs.img.files[0]);
         }
     },
+    // загружаем данные после того как перешли по ссылке
+    mounted() {
+        // обнуляем данные
+        this.resetData();
+    }
   }
 </script>
 <style scoped>

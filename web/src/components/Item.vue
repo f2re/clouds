@@ -8,7 +8,7 @@
         v-card( :loading="loading" :disabled="loading" class="mb-7 "   )
             div( class="d-flex align-center justify-center grey theme--light lighten-3 item-placeholder-img relative " )
               //- image uploaded
-              v-img( v-if="item.Image.Path!=''" :src="$store.state.addressprefix+item.Image.Path" lazy-src="@/assets/img/no-image.jpg" )
+              v-img( v-if="item.Image&&item.Image.Path!=''" :src="$store.state.addressprefix+item.Image.Path" lazy-src="@/assets/img/no-image.jpg" )
               //- upload image button
               v-btn(  dark bottom right absolute fab
                   :to="'/item/edit/'+$route.params.slug"

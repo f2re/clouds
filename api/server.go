@@ -50,8 +50,8 @@ func main() {
 	e.GET("/api/search/:q", handlers.SearchItems(db))
 	e.GET("/api/item/:slug", handlers.GetItem(db))
     e.POST("/api/items", handlers.SaveItem(db))
-    e.PUT("/api/items/:id", handlers.UpdateItem(db))
-	e.DELETE("/api/items/:id", handlers.DeleteItem(db)) 
+    e.PUT("/api/item/:slug", handlers.UpdateItem(db))
+	e.DELETE("/api/item/:slug", handlers.DeleteItem(db)) 
 	
 	// работаем с категориями
 	e.GET("/api/categories", handlers.GetCategories(db))

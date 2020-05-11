@@ -56,28 +56,29 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 		//-----------
 		img,  err := c.FormFile("Image")
 
-		if err != nil {
-			return err
-		}
-		src, err := img.Open()
-		if err != nil {
-			return err
-		}
-		defer src.Close()
+		path := ""
+		if err == nil {
+			
+			src, err := img.Open()
+			if err != nil {
+				return err
+			}
+			defer src.Close()
 
-		// Destination
-		crutime := time.Now().Unix()
-		path := "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
-		dst, err := os.Create( "web/dist"+path )
+			// Destination
+			crutime := time.Now().Unix()
+			path = "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
+			dst, err := os.Create( "web/dist"+path )
 
-		if err != nil {
-			return err
-		}
-		defer dst.Close()
+			if err != nil {
+				return err
+			}
+			defer dst.Close()
 
-		// Copy
-		if _, err = io.Copy(dst, src); err != nil {
-			return err
+			// Copy
+			if _, err = io.Copy(dst, src); err != nil {
+				return err
+			}
 		}
 
 		name := c.FormValue("name")

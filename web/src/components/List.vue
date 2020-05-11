@@ -17,7 +17,7 @@
       //- real loader
       div(v-for="(_item,_k) in items" :key="_k" class="col-4 pa-3")
         v-card(  :loading="loading" :disabled="loading" :to="'/item/'+_item.Slug"   )
-          v-img( lazy-src="@/assets/img/no-image.jpg" :src="$store.state.addressprefix+_item.Image.Path" aspect-ratio="2" class="white--text align-end"
+          v-img( lazy-src="@/assets/img/no-image.jpg" :src="_item.Image&&_item.Image.Path!=''? ($store.state.addressprefix+_item.Image.Path) : ''" aspect-ratio="2" class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.0),rgba(0,0,0,.1),rgba(0,0,0,.2), rgba(0,0,0,.5)")
             v-card-title() {{_item.Name}}
           v-card-text() Индекс изделия 

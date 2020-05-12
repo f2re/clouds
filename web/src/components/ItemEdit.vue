@@ -44,7 +44,7 @@
                                         required clearable )
                         //- код КВТ
                         v-col(cols=3)
-                            v-text-field( v-model="item.Kvt" :counter="20"  label="Код КВТ" 
+                            v-text-field( v-model="item.KVT" :counter="20"  label="Код КВТ" 
                                         prepend-icon="mdi-numeric"
                                         required clearable )
                         //- номенклатурный номер
@@ -128,7 +128,14 @@
                 v-btn( @click="reset" ) Очистить
                 v-btn( @click="submit" :dark="valid" :color="$store.state.themecolor" :disabled="!valid" ) Сохранить
                     v-icon(class="ml-5") mdi-content-save
-            
+
+    v-bottom-sheet(v-model="popup" persistent)
+        v-sheet(class="text-center" height="150px")
+            v-btn( v-if="popup_style=='error'" @click="popup= !popup" text class="mt-6" :color="popup_style" ) Закрыть
+            v-btn( v-if="popup_style!='error'" @click="popup= !popup" text class="mt-6" :color="popup_style" :to="'/item/'+newslug" ) Закрыть
+                v-icon(class="ml-4") mdi-open-in-new
+            div(class="my-3") {{popup_text}}
+
         
 </template>
 
@@ -154,7 +161,7 @@
             Category    : '',
             Index       : '',
             Snabjenie   : '',
-            Kvt         : '',
+            KVT         : '',
             Nomenklature: '',
             Dovorgan    : '',
             Reqorgan    : '',
@@ -180,6 +187,14 @@
             },
             Images      : '',
         },
+        // info popup
+        popup: false,
+        // style
+        popup_style:'error',
+        // text
+        popup_text:'',
+        // newslug
+        newslug:'',
     }),
 
     methods:{
@@ -203,10 +218,11 @@
                     _data.append( 'Image', this.$refs.img.files[0] );
                 }
                 _data.append( 'name', this.item.Name );
+                _data.append( 'slug', this.item.Slug );
                 _data.append( 'category', this.item.Category );
                 _data.append( 'index', this.item.Index );
                 _data.append( 'snabjenie', this.item.Snabjenie );
-                _data.append( 'kvt', this.item.Kvt );
+                _data.append( 'kvt', this.item.KVT );
                 _data.append( 'nomenklature', this.item.Nomenklature );
                 _data.append( 'dovorgan', this.item.Dovorgan );
                 _data.append( 'reqorgan', this.item.Reqorgan );
@@ -219,7 +235,22 @@
                 _data.append( 'tabel', JSON.stringify(this.item.Tabel) );
 
                 axios.put( this.$store.state.addressprefix+'/api/item/'+this.$route.params.slug, _data )
-                     .then( res=>console.log(res) )
+                     .then( (res)=>{
+                        this.popup = true;
+                        this.popup_style = 'success';
+                        this.popup_text = 'Изменения сохранены!';
+                        this.newslug = res.data.URL;
+                        // console.log(res);
+                        this.resetData();
+                     })
+                     .catch(error => {
+                        // console.log(error.response)
+                        if ( typeof error.response !=='undefined' ){
+                            this.popup = true;
+                            this.popup_style = 'error';
+                            this.popup_text = 'Ошибка сохранения изменений "'+error.response.data+'"';
+                        }
+                     });
             }
         },
         
@@ -233,6 +264,9 @@
     // загружаем данные после того как перешли по ссылке
     mounted() {
         var _vue = this;
+        // устанавливаем путь по тому поути, по которому зашли
+        _vue.newslug = this.$route.params.slug;
+
         // set loader
         _vue.loading = true;
         // load data

@@ -19,6 +19,12 @@ import (
 
 type H map[string]interface{}
 
+// response for request with redirect urls
+type Response struct{
+	Status string `json:"status"`
+	URL string `json:"URL"`
+}
+
 // GetItems endpoint
 func GetItems(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -99,7 +105,7 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 		var tabel models.Tabel
 		json.Unmarshal([]byte(c.FormValue("tabel")), &tabel)
 
-		res := db.Create(&models.Item{ 
+		res := db.Save(&models.Item{ 
 			Name: name, 
 			Slug: slug.Make(name),
 			// Category: category,
@@ -133,22 +139,87 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 // PutItem endpoint
 func UpdateItem(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// Instantiate a new Item
+		// get record from DB
 		var Item models.Item
-		// Map imcoming JSON body to the new Item
-        c.Bind(&Item)
-        return nil
-		// Add a Item using our new model
-		// id, err := models.PutItem(db, Item.Name)
-		// // Return a JSON response if successful
-		// if err == nil {
-		// 	return c.JSON(http.StatusCreated, H{
-		// 		"created": id,
-		// 	})
-		// 	// Handle any errors
-		// } else {
-		// 	return err
-		// }
+		s := c.Param("slug")
+		db.Preload("Tabel").Preload("Image").Where("slug = ?", s).First(&Item)
+
+		//-----------
+		// Read file
+		//-----------
+		img,  err := c.FormFile("Image")
+
+		path := ""
+		if err == nil {
+			
+			src, err := img.Open()
+			if err != nil {
+				return err
+			}
+			defer src.Close()
+
+			// Destination
+			crutime := time.Now().Unix()
+			path = "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
+			dst, err := os.Create( "web/dist"+path )
+
+			if err != nil {
+				return err
+			}
+			defer dst.Close()
+
+			// Copy
+			if _, err = io.Copy(dst, src); err != nil {
+				return err
+			}
+		}else{
+			path = ""
+		}
+
+		Item.Name         = c.FormValue("name")
+		// Item.Categoy := c.FormValue("category")
+		Item.Slug         = slug.Make(c.FormValue("name"))
+		Item.Index        = c.FormValue("index")
+		Item.Snabjenie    = c.FormValue("snabjenie")
+		Item.KVT          = c.FormValue("kvt")
+		Item.Nomenklature = c.FormValue("nomenklature")
+		Item.Dovorgan     = c.FormValue("dovorgan")
+		Item.Reqorgan     = c.FormValue("reqorgan")
+		Item.Explorgan    = c.FormValue("explorgan")
+		Item.Creator      = c.FormValue("creator")
+		Item.Description  = c.FormValue("description")
+		Item.Destination  = c.FormValue("destination")
+		Item.Composition  = c.FormValue("composition")
+		Item.TTH          = c.FormValue("tth")
+		// decode tabel variable
+		// var tabel models.Tabel
+		json.Unmarshal([]byte(c.FormValue("tabel")), &Item.Tabel)
+		if ( path != "" ){
+			if (db.Model(&Item).Association("Image").Count()>0){
+				Item.Image.Path = path
+			}else{
+				Item.Image = models.Image{Path:path}
+			}
+		}
+
+		res := db.Save(&Item)
+
+		if res.Error != nil {
+			errors := res.GetErrors()
+			errstr := ""
+			for _, err := range errors {
+				errstr = errstr+err.Error()
+			}
+			return c.JSON(http.StatusOK, errstr  )
+		}
+
+		resp := &Response{
+			Status:"OK" ,
+			URL:Item.Slug,
+		}
+
+		return c.JSON(http.StatusOK, resp )
+		// return c.String(http.StatusOK, "OK")
 	}
 }
 
@@ -159,84 +230,6 @@ func DeleteItem(db *gorm.DB) echo.HandlerFunc {
         return nil
 		// Use our new model to delete a Item
 		// _, err := models.DeleteItem(db, id)
-		// // Return a JSON response on success
-		// if err == nil {
-		// 	return c.JSON(http.StatusOK, H{
-		// 		"deleted": id,
-		// 	})
-		// 	// Handle errors
-		// } else {
-		// 	return err
-		// }
-	}
-}
-
-/**
- *
- * КАТЕГОРИИ
- * 
- */
-
-
-// GetItems endpoint
-func GetCategories(db *gorm.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-        var Category models.Category
-		return c.JSON(http.StatusOK, db.Find(&Category) )
-	}
-}
-
-// PutCategory endpoint
-func SaveCategories(db *gorm.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		// Instantiate a new Category
-		var Category models.Category
-		// Map imcoming JSON body to the new Category
-        c.Bind(&Category)
-        return nil
-		// Add a Category using our new model
-		// id, err := models.PutCategory(db, Category.Name)
-		// // Return a JSON response if successful
-		// if err == nil {
-		// 	return c.JSON(http.StatusCreated, H{
-		// 		"created": id,
-		// 	})
-		// 	// Handle any errors
-		// } else {
-		// 	return err
-		// }
-	}
-}
-
-// PutCategory endpoint
-func UpdateCategories(db *gorm.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		// Instantiate a new Category
-		var Category models.Category
-		// Map imcoming JSON body to the new Category
-        c.Bind(&Category)
-        return nil
-		// Add a Category using our new model
-		// id, err := models.PutCategory(db, Category.Name)
-		// // Return a JSON response if successful
-		// if err == nil {
-		// 	return c.JSON(http.StatusCreated, H{
-		// 		"created": id,
-		// 	})
-		// 	// Handle any errors
-		// } else {
-		// 	return err
-		// }
-	}
-}
-
-// DeleteCategory endpoint
-func DeleteCategories(db *gorm.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-        // id, _ := strconv.Atoi(c.Param("id"))
-        return nil
-		// Use our new model to delete a Category
-		// _, err := models.DeleteCategory(db, id)
 		// // Return a JSON response on success
 		// if err == nil {
 		// 	return c.JSON(http.StatusOK, H{

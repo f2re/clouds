@@ -9,7 +9,7 @@ type Item struct {
 	gorm.Model
 	Name string `gorm:"index:name"` // название изделия
 	Slug string  `gorm:"index;unique;not null"`// строка адреса
-	Category Category `gorm:"foreignkey:ID"` // категория техники
+	Category uint // `gorm:"foreignkey:ID"` // категория техники
 	Index string `gorm:"index:indx"` // индекс иделия
 	Snabjenie string `gorm:"type:text"`// принят на снабжение
 	KVT string `gorm:"index:kvt"` // код КВТ
@@ -43,13 +43,6 @@ type Tabel struct {
 	// ItemID uint
 }
 
-// Category категория техники
-type Category struct {
-	gorm.Model
-	Name string `gorm:"index;unique;not null"`
-	Slug string `gorm:"unique;not null"`
-}
-
 // Images фотографии
 type Image struct {
 	gorm.Model
@@ -57,4 +50,11 @@ type Image struct {
 	Path string 
 	// внешний ключ
 	// ImageRefer uint
+}
+
+type Owneritems struct {
+	gorm.Model
+	DateStart uint // дата ввода в эксплуатацию
+	DayHours float32 // индекс иделия
+	Item Item `gorm:"foreignkey:ID"`// Изделие
 }

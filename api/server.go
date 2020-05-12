@@ -27,7 +27,7 @@ func main() {
 
 	// var Item models.Item
 	// Миграция схем
-	db.AutoMigrate(&models.Item{},&models.Category{},&models.Tabel{},&models.Image{})
+	db.AutoMigrate(&models.Item{},&models.Tabel{},&models.Image{})
 	
 
 	// Create a new instance of Echo
@@ -53,11 +53,6 @@ func main() {
     e.PUT("/api/item/:slug", handlers.UpdateItem(db))
 	e.DELETE("/api/item/:slug", handlers.DeleteItem(db)) 
 	
-	// работаем с категориями
-	e.GET("/api/categories", handlers.GetCategories(db))
-	e.POST("/api/categories", handlers.SaveCategories(db))
-    e.PUT("/api/categories/:id", handlers.UpdateCategories(db))
-	e.DELETE("/api/categories/:id", handlers.DeleteCategories(db))
 
 	e.File("/*", "web/dist/index.html")
 	

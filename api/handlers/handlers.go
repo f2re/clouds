@@ -34,6 +34,18 @@ func GetItems(db *gorm.DB) echo.HandlerFunc {
 }
 
 // GetItems endpoint
+func GetCategory(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var Items []models.Item
+		category, err := strconv.ParseUint(c.Param("category"),10,32)
+		if ( err == nil ){
+			return c.JSON(http.StatusOK, db.Preload("Tabel").Preload("Image").Where(&models.Item{ Category:category }).Find(&Items) )
+		}
+		return c.JSON(http.StatusOK, err)
+	}
+}
+
+// GetItems endpoint
 func GetItem(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var Item models.Item
@@ -87,20 +99,20 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 			}
 		}
 
-		name := c.FormValue("name")
-		// category := c.FormValue("category")
-		index := c.FormValue("index")
-		snabjenie := c.FormValue("snabjenie")
-		kvt := c.FormValue("kvt")
+		name         := c.FormValue("name")
+		category, err:= strconv.ParseUint(c.FormValue("category"),10,32)
+		index        := c.FormValue("index")
+		snabjenie    := c.FormValue("snabjenie")
+		kvt          := c.FormValue("kvt")
 		nomenklature := c.FormValue("nomenklature")
-		dovorgan := c.FormValue("dovorgan")
-		reqorgan := c.FormValue("reqorgan")
-		explorgan := c.FormValue("explorgan")
-		creator := c.FormValue("creator")
-		description := c.FormValue("description")
-		destination := c.FormValue("destination")
-		composition := c.FormValue("composition")
-		tth := c.FormValue("tth")
+		dovorgan     := c.FormValue("dovorgan")
+		reqorgan     := c.FormValue("reqorgan")
+		explorgan    := c.FormValue("explorgan")
+		creator      := c.FormValue("creator")
+		description  := c.FormValue("description")
+		destination  := c.FormValue("destination")
+		composition  := c.FormValue("composition")
+		tth          := c.FormValue("tth")
 		// decode tabel variable
 		var tabel models.Tabel
 		json.Unmarshal([]byte(c.FormValue("tabel")), &tabel)
@@ -108,7 +120,7 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 		res := db.Save(&models.Item{ 
 			Name: name, 
 			Slug: slug.Make(name),
-			// Category: category,
+			Category: category,
 			Index: index,
 			Snabjenie: snabjenie,
 			KVT: kvt,
@@ -175,9 +187,9 @@ func UpdateItem(db *gorm.DB) echo.HandlerFunc {
 		}else{
 			path = ""
 		}
-
+		category, err := strconv.ParseUint(c.FormValue("category"),10,32)
 		Item.Name         = c.FormValue("name")
-		// Item.Categoy := c.FormValue("category")
+		Item.Category     = category
 		Item.Slug         = slug.Make(c.FormValue("name"))
 		Item.Index        = c.FormValue("index")
 		Item.Snabjenie    = c.FormValue("snabjenie")
@@ -226,18 +238,10 @@ func UpdateItem(db *gorm.DB) echo.HandlerFunc {
 // DeleteItem endpoint
 func DeleteItem(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-        // id, _ := strconv.Atoi(c.Param("id"))
-        return nil
-		// Use our new model to delete a Item
-		// _, err := models.DeleteItem(db, id)
-		// // Return a JSON response on success
-		// if err == nil {
-		// 	return c.JSON(http.StatusOK, H{
-		// 		"deleted": id,
-		// 	})
-		// 	// Handle errors
-		// } else {
-		// 	return err
-		// }
+		var Item models.Item
+		s := c.Param("slug")
+		db.Preload("Tabel").Preload("Image").Where("slug = ?", s).Delete(&Item)
+		
+        return c.String(http.StatusOK, "OK")
 	}
 }

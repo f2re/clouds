@@ -9,7 +9,7 @@ type Item struct {
 	gorm.Model
 	Name string `gorm:"index:name"` // название изделия
 	Slug string  `gorm:"index;unique;not null"`// строка адреса
-	Category uint // `gorm:"foreignkey:ID"` // категория техники
+	Category uint64 // `gorm:"foreignkey:ID"` // категория техники
 	Index string `gorm:"index:indx"` // индекс иделия
 	Snabjenie string `gorm:"type:text"`// принят на снабжение
 	KVT string `gorm:"index:kvt"` // код КВТ

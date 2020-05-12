@@ -52,7 +52,8 @@ func main() {
     e.POST("/api/items", handlers.SaveItem(db))
     e.PUT("/api/item/:slug", handlers.UpdateItem(db))
 	e.DELETE("/api/item/:slug", handlers.DeleteItem(db)) 
-	
+
+	e.GET("/api/category/:category", handlers.GetCategory(db))
 
 	e.File("/*", "web/dist/index.html")
 	

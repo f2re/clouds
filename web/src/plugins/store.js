@@ -14,11 +14,16 @@ export default new Vuex.Store({
         // local address prefix
         addressprefix:'http://localhost:8000',
         // addressprefix:'',
+        // Категории техники
+        categories:[
+          { val:1,
+            text: "Измерительная техника"},
+          { val:2,
+            text: "Радиозондировочная техника"},
+          { val:3,
+            text: "Телекоммутационная техника"},
+        ]
     },
-    mutations: {
-      increment (state) {
-        state.count++
-      }
-    }
+    
 })
   

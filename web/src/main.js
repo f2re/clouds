@@ -23,7 +23,7 @@ const router = new VueRouter({
     // dynamic segments start with a colon
     { path: '/', component: Home },
     { path: '/list', component: List },
-    { path: '/navigation', component: Navigation },
+    { path: '/navigation/:category', component: Navigation },
     { path: '/item/add', component: AddItem },
     { path: '/item/:slug', component: Item },
     { path: '/item/edit/:slug', component: ItemEdit },

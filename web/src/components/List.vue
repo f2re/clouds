@@ -50,8 +50,6 @@
         // console.log(_vue.items[0].Image.Path);
         _vue.loading=false;
       } );
-      console.log('sdf');
-
     }
   }
 </script>

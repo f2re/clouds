@@ -39,7 +39,13 @@
                         v-btn( class="ml-8" icon color="grey lighten-1" @click="copyToClipboard(item.Nomenklature)")
                           v-icon mdi-content-copy
                       p( class="display-1 text--primary mb-0" ) {{item.Nomenklature}}
-
+              v-row
+                v-col(cols=4 class="pl-8")
+                  div(class="body-1 d-flex w-100 justify-space-between align-center" ) Категория техники
+                    v-btn( class="ml-8" icon color="grey lighten-1" :to="'/navigation/'+getCategoryIndex(item.Category)")
+                      v-icon mdi-open-in-new
+                v-col(cols=8)
+                  div( class="body-1  grey--text text--darken-4" ) {{getCategoryName(item.Category)}}
               v-row
                 v-col(cols=4 class="pl-8")
                   div(class="body-1 d-flex w-100 justify-space-between align-center" ) Довольствующий орган
@@ -164,7 +170,27 @@
       // copy text to clipboard
       copyToClipboard(text){
         navigator.clipboard.writeText(text);
-      }
+      },
+      // получаем индекс категории из сторейджа
+      getCategoryIndex(indx){
+        let r = false;
+        this.$store.state.categories.forEach( obj => {
+          if ( obj.val==indx ){
+            r=obj.val
+          }
+        } );
+        return r;
+      },
+      // получаем имя категории из сторейджа
+      getCategoryName(indx){
+        let r = false;
+        this.$store.state.categories.forEach( obj => {
+          if ( obj.val==indx ){
+            r= obj.text
+          }
+        } );
+        return r;
+      },
     }
   }
 </script>

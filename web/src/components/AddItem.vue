@@ -30,6 +30,13 @@
                             v-text-field( v-model="item.name" :counter="200" :rules="reqRules" label="Наименование изделия" 
                                         prepend-icon="mdi-sign-text"
                                         required clearable )
+                    v-row
+                        v-col(cols=12)
+                            v-select( :items="$store.state.categories" v-model="item.category"
+                                      item-text="text" item-value="val"
+                                      prepend-icon="mdi-format-list-bulleted-type"
+                                      label="Категория техники" )
+                                
                     v-row                        
                         //- принят на снабжение
                         v-col(cols=12)
@@ -53,6 +60,8 @@
                                         prepend-icon="mdi-numeric"
                                         required clearable )
                     
+                    
+
                     v-row
                         //- довольствующий орган
                         v-col(cols=6)
@@ -175,7 +184,7 @@
             // сначала валидируем
             this.validate();
             // if all valid
-            console.log(this.item.image);
+            
             if ( this.valid ){
                 let _data = new FormData();
                 if( this.$refs.img.files[0] ){
@@ -217,7 +226,7 @@
             this.item = {
                 image       : '',
                 name        : '',
-                category    : '',
+                category    : 1,
                 index       : '',
                 snabjenie   : '',
                 kvt         : '',

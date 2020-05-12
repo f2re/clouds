@@ -30,6 +30,12 @@
                             v-text-field( v-model="item.Name" :counter="200" :rules="reqRules" label="Наименование изделия" 
                                         prepend-icon="mdi-sign-text"
                                         required clearable )
+                    v-row
+                        v-col(cols=12)
+                            v-select( :items="$store.state.categories" v-model="item.Category"
+                                      item-text="text" item-value="val"
+                                      prepend-icon="mdi-format-list-bulleted-type"
+                                      label="Категория техники" )
                     v-row                        
                         //- принят на снабжение
                         v-col(cols=12)
@@ -124,15 +130,17 @@
                         v-col
                             v-text-field( v-model="item.Tabel.School" type="number" min=0 step=1 label="Учебное заведение" )
             v-card-actions(  )
+
+                v-btn( @click="deleteItem" text color="red" ) Удалить
+                    v-icon(class="ml-5") mdi-delete
                 v-spacer
-                v-btn( @click="reset" ) Очистить
                 v-btn( @click="submit" :dark="valid" :color="$store.state.themecolor" :disabled="!valid" ) Сохранить
                     v-icon(class="ml-5") mdi-content-save
 
     v-bottom-sheet(v-model="popup" persistent)
         v-sheet(class="text-center" height="150px")
             v-btn( v-if="popup_style=='error'" @click="popup= !popup" text class="mt-6" :color="popup_style" ) Закрыть
-            v-btn( v-if="popup_style!='error'" @click="popup= !popup" text class="mt-6" :color="popup_style" :to="'/item/'+newslug" ) Закрыть
+            v-btn( v-if="popup_style!='error'" @click="popup= !popup" text class="mt-6" :color="popup_style" :to="newslug" ) Закрыть
                 v-icon(class="ml-4") mdi-open-in-new
             div(class="my-3") {{popup_text}}
 
@@ -158,7 +166,7 @@
         item:{
             Image       : '',
             Name        : '',
-            Category    : '',
+            Category    : 1,
             Index       : '',
             Snabjenie   : '',
             KVT         : '',
@@ -206,6 +214,26 @@
         reset () {
             this.$refs.form.reset()
         },
+        // удаляем 
+        deleteItem(){
+            axios.delete( this.$store.state.addressprefix+'/api/item/'+this.$route.params.slug )
+                .then( ()=>{
+                    this.popup       = true;
+                    this.popup_style = 'success';
+                    this.popup_text  = 'Карточка изделия удалена!';
+                    this.newslug     = '/list/';
+                    // console.log(res);
+                    this.resetData();
+                })
+                .catch(error => {
+                    // console.log(error.response)
+                    if ( typeof error.response !=='undefined' ){
+                        this.popup       = true;
+                        this.popup_style = 'error';
+                        this.popup_text  = 'Ошибка сохранения изменений "'+error.response.data+'"';
+                    }
+                });
+        },
         // отправляем форму
         submit(){
             // сначала валидируем
@@ -236,19 +264,19 @@
 
                 axios.put( this.$store.state.addressprefix+'/api/item/'+this.$route.params.slug, _data )
                      .then( (res)=>{
-                        this.popup = true;
+                        this.popup       = true;
                         this.popup_style = 'success';
-                        this.popup_text = 'Изменения сохранены!';
-                        this.newslug = res.data.URL;
+                        this.popup_text  = 'Изменения сохранены!';
+                        this.newslug     = '/item/'+res.data.URL;
                         // console.log(res);
                         this.resetData();
                      })
                      .catch(error => {
                         // console.log(error.response)
                         if ( typeof error.response !=='undefined' ){
-                            this.popup = true;
+                            this.popup       = true;
                             this.popup_style = 'error';
-                            this.popup_text = 'Ошибка сохранения изменений "'+error.response.data+'"';
+                            this.popup_text  = 'Ошибка сохранения изменений "'+error.response.data+'"';
                         }
                      });
             }

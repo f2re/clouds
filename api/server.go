@@ -47,6 +47,7 @@ func main() {
 
 	// работаем с техникой
 	e.GET("/api/items", handlers.GetItems(db))
+	e.GET("/api/search", handlers.GetItems(db))
 	e.GET("/api/search/:q", handlers.SearchItems(db))
 	e.GET("/api/item/:slug", handlers.GetItem(db))
     e.POST("/api/items", handlers.SaveItem(db))

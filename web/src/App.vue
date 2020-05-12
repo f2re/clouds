@@ -9,12 +9,20 @@
       v-divider
 
       v-list( dense nav )
-        v-list-item( v-for='(_m,_i) in menu' :key="_i" :to="_m.href" link )
+        v-list-item( v-for='(_m,_i) in menu' :key="_i" :to="_m.href" link  )
           v-list-item-icon
             v-icon( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) {{_m.icon}}
           v-list-item-content
             v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) {{_m.title}}
+
           
+        v-list( dense nav class="pa-0 pl-5" )
+          v-list-item( v-for='(_m,_i) in $store.state.categories' :key="_i" :to="'/navigation/'+_m.val" link )
+            v-list-item-icon(class="mr-2")
+              v-icon( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) mdi-checkbox-blank-circle-outline
+            v-list-item-content
+              v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) {{_m.text}}
+
         v-footer( dark padless absolute  )
           v-card( flat tile width="100%" :color="$store.state.themecolor" class="text-center"   )
             

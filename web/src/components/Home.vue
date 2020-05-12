@@ -144,28 +144,7 @@
           }
         })
       },
-      itemsa () {
-        return [ { header: 'Group 1' },
-          { name: 'Sandra Adams', group: 'Group 1' },
-          { name: 'Ali Connors', group: 'Group 1' },
-          { name: 'Trevor Hansen', group: 'Group 1' },
-          { name: 'Tucker Smith', group: 'Group 1' },
-          { divider: true },
-          { header: 'Group 2' },
-          { name: 'Britta Holt', group: 'Group 2' },
-          { name: 'Jane Smith ', group: 'Group 2' },
-          { name: 'John Smith', group: 'Group 2' },
-          { name: 'Sandra Williams', group: 'Group 2' }
-          ]
-        // return this.entries.map(entry => {
-        //   const Description = entry.Name.length > this.descriptionLimit
-        //     ? entry.Name.slice(0, this.descriptionLimit) + '...'
-        //     : entry.Name
-
-        //   // entry.Description = Description
-        //   return { API:'sdf', Description: Description }
-        // })
-      },
+      
     },
 
     watch: {
@@ -181,11 +160,13 @@
         // Lazily load input items
         axios.get(this.$store.state.addressprefix+'/api/search/'+val)
           .then(res => {
-            this.count   = res.data.Value.length
-            this.entries = res.data.Value
-            this.items = res.data.Value.map(_e => {
-              return _e
-            } )
+              if ( typeof res.data.Value!=='undefined' ){
+                this.count   = res.data.Value.length
+                this.entries = res.data.Value
+                this.items = res.data.Value.map(_e => {
+                  return _e
+                } )
+              }
             // console.log(this.entries)
           })
           .catch(err => {

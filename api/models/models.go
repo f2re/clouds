@@ -52,7 +52,7 @@ type Image struct {
 	// ImageRefer uint
 }
 
-type Owneritems struct {
+type UserItems struct {
 	gorm.Model
 	DateStart uint // дата ввода в эксплуатацию
 	DayHours float32 // индекс иделия

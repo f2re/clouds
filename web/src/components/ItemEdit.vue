@@ -8,7 +8,7 @@
         v-card( :loading="loading" :disabled="loading" class="mb-7 "   )
             div( class="d-flex align-center justify-center grey theme--light lighten-3 item-placeholder-img relative " )
                 //- image uploaded
-                v-img( v-if="item.Image!=''" :src="$store.state.addressprefix+item.Image" )
+                v-img( v-if="item.Image!=''" :src="(isblob?'':$store.state.addressprefix)+item.Image" )
                 //- image placeholder
                 div(v-if="item.Image==''")
                     v-icon( size="84px") mdi-image
@@ -203,6 +203,8 @@
         popup_text:'',
         // newslug
         newslug:'',
+        // image blobbing whitout prefix
+        isblob: false,
     }),
 
     methods:{
@@ -284,8 +286,7 @@
         
         // upload image
         uploadImg(){
-            // console.log(ev);
-            // console.log(this.$refs.img.files[0]);
+            this.isblob     = true;
             this.item.Image = URL.createObjectURL(this.$refs.img.files[0]);
         }
     },

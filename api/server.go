@@ -19,15 +19,28 @@ import (
 
 
 func main() {
-	db, err := gorm.Open("sqlite3", "api/db/tcmstorage.db")
+	dbpath := "api/db/"
+
+	// TCM database
+	db, err := gorm.Open("sqlite3", dbpath+"tcmstorage.db")
 	if err != nil {
-		panic("failed to connect database")
+		panic("failed to connect database tcmstorage.db")
 	}
 	defer db.Close()
 
+	// User database
+	// udb, err := gorm.Open("sqlite3", dbpath+"usertcm.db")
+	// if err != nil {
+	// 	panic("failed to connect database usertcm.db")
+	// }
+	// defer db.Close()
+
 	// var Item models.Item
 	// Миграция схем
-	db.AutoMigrate(&models.Item{},&models.Tabel{},&models.Image{})
+	db.AutoMigrate(	&models.Item{},
+					&models.Tabel{},
+					&models.Image{}, 
+					&models.UserItems{})
 	
 
 	// Create a new instance of Echo
@@ -42,15 +55,17 @@ func main() {
 	e.Static("/js", "web/dist/js")
 	e.Static("/css", "web/dist/css")
 	e.Static("/img", "web/dist/img")
-	e.Static("/uploads", "web/dist/uploads")
+	e.Static("/uploads", "web/uploads")
 	e.Static("/fonts", "web/dist/fonts")
 
 	// работаем с техникой
 	e.GET("/api/items", handlers.GetItems(db))
+	e.GET("/api/useritems", handlers.GetUserItems(db))
 	e.GET("/api/search", handlers.GetItems(db))
 	e.GET("/api/search/:q", handlers.SearchItems(db))
 	e.GET("/api/item/:slug", handlers.GetItem(db))
     e.POST("/api/items", handlers.SaveItem(db))
+    e.POST("/api/adduseritem", handlers.AddUserItem(db))
     e.PUT("/api/item/:slug", handlers.UpdateItem(db))
 	e.DELETE("/api/item/:slug", handlers.DeleteItem(db)) 
 

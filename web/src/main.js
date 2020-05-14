@@ -15,6 +15,8 @@ import Home from './components/Home';
 import Item from './components/Item';
 import AddItem from './components/AddItem';
 import ItemEdit from './components/ItemEdit';
+import User from './components/User';
+import UserItem from './components/UserItem';
 
 // Vue router
 const router = new VueRouter({
@@ -27,6 +29,8 @@ const router = new VueRouter({
     { path: '/item/add', component: AddItem },
     { path: '/item/:slug', component: Item },
     { path: '/item/edit/:slug', component: ItemEdit },
+    { path: '/user', component: User },
+    { path: '/user/:slug', component: UserItem },
   ]
 })
 

@@ -25,6 +25,7 @@ type Response struct{
 	URL string `json:"URL"`
 }
 
+
 // GetItems endpoint
 func GetItems(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -86,7 +87,7 @@ func SaveItem(db *gorm.DB) echo.HandlerFunc {
 			// Destination
 			crutime := time.Now().Unix()
 			path = "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
-			dst, err := os.Create( "web/dist"+path )
+			dst, err := os.Create( "web"+path )
 
 			if err != nil {
 				return err
@@ -173,7 +174,7 @@ func UpdateItem(db *gorm.DB) echo.HandlerFunc {
 			// Destination
 			crutime := time.Now().Unix()
 			path = "/uploads/"+strconv.FormatInt(crutime, 10)+filepath.Ext(img.Filename)
-			dst, err := os.Create( "web/dist"+path )
+			dst, err := os.Create( "web"+path )
 
 			if err != nil {
 				return err
@@ -245,3 +246,40 @@ func DeleteItem(db *gorm.DB) echo.HandlerFunc {
         return c.String(http.StatusOK, "OK")
 	}
 }
+
+
+// 
+//  User items section
+// 
+
+
+// GetUserItems endpoint
+func GetUserItems(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+        var UserItems []models.UserItems
+		return c.JSON(http.StatusOK, db.Preload("Item").Find(&UserItems) )
+	}
+}
+
+// GetItems endpoint
+func AddUserItem(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var item models.Item
+		s := c.QueryParam("slug")
+		// search Item
+		db.Preload("Tabel").Preload("Image").Where("slug = ?", s).First(&item)
+		res := db.Save(&models.UserItems{ Item: item })
+
+		if res.Error != nil {
+			errors := res.GetErrors()
+			errstr := ""
+			for _, err := range errors {
+				errstr = errstr+err.Error()
+			}
+			return c.JSON(http.StatusOK, errstr  )
+		}
+
+		return c.JSON(http.StatusOK, "OK" )
+	}
+}
+

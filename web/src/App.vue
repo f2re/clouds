@@ -5,7 +5,7 @@
       v-list-item
         v-list-item-content
           v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) Справочник ТСМ
-          v-list-item-subtitle( :class="$store.state.themecolor+'--text'" class="text--lighten-2" ) v0.1
+          v-list-item-subtitle( :class="$store.state.themecolor+'--text'" class="text--lighten-2" ) v{{version}}
       v-divider
 
       v-list( dense nav )
@@ -67,16 +67,16 @@ export default {
 
   data: () => ({
     
-    
+    version: '0.3',
     
     // menu
     menu:[
       { "title": 'Главная',
         "href" : '/',
         "icon" : "mdi-home" },
-      // { "title": 'Разделы',
-      //   "href" : '/navigation',
-      //   "icon" : "mdi-book-multiple" },
+      { "title": 'ТСМ метеоподразделения',
+        "href" : '/user',
+        "icon" : "mdi-account-circle" },
       { "title": 'Список ТСМ',
         "href" : '/list',
         "icon" : "mdi-view-list" },

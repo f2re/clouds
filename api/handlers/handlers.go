@@ -256,8 +256,8 @@ func DeleteItem(db *gorm.DB) echo.HandlerFunc {
 // GetUserItems endpoint
 func GetUserItems(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-        var UserItems []models.UserItems
-		return c.JSON(http.StatusOK, db.Preload("Item").Find(&UserItems) )
+		var UserItems []models.UserItems
+		return c.JSON(http.StatusOK, db.Preload("Item").Preload("Item.Image").Preload("Item.Tabel").Find(&UserItems) )
 	}
 }
 
@@ -265,10 +265,11 @@ func GetUserItems(db *gorm.DB) echo.HandlerFunc {
 func AddUserItem(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var item models.Item
-		s := c.QueryParam("slug")
+		s := c.FormValue("slug")
 		// search Item
-		db.Preload("Tabel").Preload("Image").Where("slug = ?", s).First(&item)
-		res := db.Save(&models.UserItems{ Item: item })
+		db.Where("slug=?", s).First(&item)
+		// c.JSON(http.StatusOK, s  )
+		res := db.Create(&models.UserItems{ ItemID: item.ID })
 
 		if res.Error != nil {
 			errors := res.GetErrors()

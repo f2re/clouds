@@ -70,7 +70,12 @@
                         gradient="to bottom, rgba(0,0,0,.0),rgba(0,0,0,.1),rgba(0,0,0,.2), rgba(0,0,0,.5)")
                         v-card-title() {{_item.Name}}
                     v-card-text() Индекс изделия 
-                        b {{_item.Index}}          
+                        b {{_item.Index}}
+                    v-fade-transition
+                      v-overlay(v-if="_item.Slug==addedSlug" absolute :color="$store.state.themecolor")
+                        v-btn( text fab x-large)
+                          v-icon(class="mdi-48px") mdi-check-circle
+                        
               
             
           
@@ -95,6 +100,8 @@
       // name: this.$route.params.name
       //   open dialog to select item
       dialog:false,
+      // 
+      addedSlug:''
     }),
     methods:{
       // получаем индекс категории из сторейджа
@@ -120,9 +127,12 @@
       //   add Item to user store
       addItem(slug){
         //   let _vue = this;
-          axios.post(this.$store.state.addressprefix+'/api/adduseritem', slug )
-               .then( res => { 
-                   console.log(res);                   
+          let data = new FormData();
+          data.append('slug',slug);
+          axios.post(this.$store.state.addressprefix+'/api/adduseritem', data )
+               .then( () => { 
+                  //  console.log(res);
+                   this.addedSlug = slug;
                } );
       }
       
@@ -136,7 +146,7 @@
       axios.get(this.$store.state.addressprefix+'/api/useritems')
       .then( res => { 
         _vue.userItems = res.data.Value;
-        // console.log(_vue.items[0].Image.Path);
+        // console.log(_vue.userItems[0].Item.Image.Path);
         _vue.loadingUser=false;
       } );
 

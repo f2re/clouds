@@ -56,5 +56,6 @@ type UserItems struct {
 	gorm.Model
 	DateStart uint // дата ввода в эксплуатацию
 	DayHours float32 // индекс иделия
-	Item Item `gorm:"foreignkey:ID"`// Изделие
+	ItemID uint
+	Item Item `gorm:"foreignkey:ItemID"`// Изделие
 }

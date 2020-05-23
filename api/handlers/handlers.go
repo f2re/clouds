@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"encoding/json"
 
+	"gopkg.in/oleiade/reflections.v1"
+
 	"../models"
 
 	"github.com/labstack/echo"
@@ -269,7 +271,11 @@ func AddUserItem(db *gorm.DB) echo.HandlerFunc {
 		// search Item
 		db.Where("slug=?", s).First(&item)
 		// c.JSON(http.StatusOK, s  )
-		res := db.Create(&models.UserItems{ ItemID: item.ID })
+		res := db.Create(&models.UserItems{ ItemID: item.ID, 
+											DateStart:"2004-07-23",
+											DayHours:24,
+											Srok:15,
+										 })
 
 		if res.Error != nil {
 			errors := res.GetErrors()
@@ -284,3 +290,57 @@ func AddUserItem(db *gorm.DB) echo.HandlerFunc {
 	}
 }
 
+// GetUserItem endpoint
+func GetUserItem(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var UserItem models.UserItems
+		id := c.Param("id")
+		return c.JSON(http.StatusOK, db.Preload("Item").Preload("Item.Image").Preload("Item.Tabel").Where(id).Find(&UserItem) )
+	}
+}
+
+// PutItem endpoint
+func UpdateUserItem(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// get record from DB
+		var Item models.UserItems
+		id := c.Param("id")
+		db.Where(id).First(&Item)
+
+		// get param name
+		paramname := c.FormValue("paramName")
+
+		err := reflections.SetField(&Item, paramname, c.FormValue(paramname))
+		
+		res := db.Save(&Item)
+
+		if res.Error != nil || err != nil {
+			errors := res.GetErrors()
+			errstr := ""
+			for _, err := range errors {
+				errstr = errstr+err.Error()
+			}
+			return c.JSON(http.StatusOK, errstr  )
+		}
+
+		resp := &Response{
+			Status:"OK" ,
+			URL: strconv.FormatUint(uint64(Item.ID),10),
+		}
+
+		return c.JSON(http.StatusOK, resp )
+		// return c.String(http.StatusOK, "OK")
+	}
+}
+
+
+// DeleteUserItem endpoint
+func DeleteUserItem(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var Item models.UserItems
+		id := c.Param("id")
+		db.Where(id).Delete(&Item)
+		
+        return c.String(http.StatusOK, "OK")
+	}
+}

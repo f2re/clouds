@@ -64,10 +64,13 @@ func main() {
 	e.GET("/api/search", handlers.GetItems(db))
 	e.GET("/api/search/:q", handlers.SearchItems(db))
 	e.GET("/api/item/:slug", handlers.GetItem(db))
+	e.GET("/api/useritem/:id", handlers.GetUserItem(db))
     e.POST("/api/items", handlers.SaveItem(db))
     e.POST("/api/adduseritem", handlers.AddUserItem(db))
     e.PUT("/api/item/:slug", handlers.UpdateItem(db))
+    e.PUT("/api/useritem/:id", handlers.UpdateUserItem(db))
 	e.DELETE("/api/item/:slug", handlers.DeleteItem(db)) 
+	e.DELETE("/api/removeuseritem/:id", handlers.DeleteUserItem(db)) 
 
 	e.GET("/api/category/:category", handlers.GetCategory(db))
 

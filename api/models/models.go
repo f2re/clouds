@@ -54,8 +54,11 @@ type Image struct {
 
 type UserItems struct {
 	gorm.Model
-	DateStart uint // дата ввода в эксплуатацию
-	DayHours float32 // индекс иделия
+	DateStart string `gorm:"default:'2004-07-23'"` // дата ввода в эксплуатацию
+	DayHours float32 `gorm:"default:24"` // Работа в день
+	Srok float32 `gorm:"default:15"`// Время наработки на отказ, лет
+	Inventory string //Инвентарный номер
+	Primechanie string `gorm:"type:text"`// Примечание
 	ItemID uint
 	Item Item `gorm:"foreignkey:ItemID"`// Изделие
 }

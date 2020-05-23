@@ -30,7 +30,7 @@ const router = new VueRouter({
     { path: '/item/:slug', component: Item },
     { path: '/item/edit/:slug', component: ItemEdit },
     { path: '/user', component: User },
-    { path: '/user/:slug', component: UserItem },
+    { path: '/user/:id', component: UserItem },
   ]
 })
 

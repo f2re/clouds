@@ -15,7 +15,7 @@
                     bottom
                     right
                     fab)
-            v-icon mdi-book-plus
+          v-icon mdi-book-plus
     v-divider
           
       
@@ -32,12 +32,35 @@
           v-img( lazy-src="@/assets/img/no-image.jpg" aspect-ratio="2" class="white--text align-end")
       //- real loader
       div(v-for="(_item,_k) in userItems" :key="_k" class="col-4 pa-3")
-        v-card(  :loading="loadingUser" :disabled="loadingUser" :to="'/item/'+_item.Item.Slug"   )
-          v-img( lazy-src="@/assets/img/no-image.jpg" :src="_item.Item.Image&&_item.Item.Image.Path!=''? ($store.state.addressprefix+_item.Item.Image.Path) : ''" aspect-ratio="2" class="white--text align-end"
+        v-card(  :loading="loadingUser" :disabled="loadingUser"    )
+          v-img(  lazy-src="@/assets/img/no-image.jpg" :src="_item.Item.Image&&_item.Item.Image.Path!=''? ($store.state.addressprefix+_item.Item.Image.Path) : ''" aspect-ratio="2" class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.0),rgba(0,0,0,.1),rgba(0,0,0,.2), rgba(0,0,0,.5)")
-            v-card-title() {{_item.Item.Name}}
-          v-card-text() Индекс изделия 
-            b {{_item.Item.Index}}
+            v-card-title() {{_item.Item.Name}} {{'#'+_item.ID}}
+          v-card-text() 
+            p Индекс изделия: 
+              b {{_item.Item.Index}}
+            p(class="mb-0") Дата ввода в эксплуатацию: 
+              b {{_item.DateStart!=''?_item.DateStart:'не задано'}}
+          v-card-actions
+            v-btn( @click="deleteItem(_item.ID)" 
+                    dark
+                    text
+                    color="red"
+                    ) Удалить
+              v-icon mdi-delete
+            v-spacer    
+            v-btn( :to="'/item/'+_item.Item.Slug"
+                    dark
+                    text
+                    :color="$store.state.themecolor"
+                    target="_blank"
+                    )
+              v-icon mdi-open-in-new
+            v-btn( :to="'/user/'+_item.ID"
+                    dark
+                    :color="$store.state.themecolor"
+                    ) Открыть
+              v-icon mdi-open-in-app
     
     v-dialog( v-model="dialog" 
               fullscreen 
@@ -50,7 +73,7 @@
           v-toolbar-title Ввыберите технику из списка для добавления в штат метеоподразделения
           v-spacer
           v-toolbar-items
-              v-btn( @click="dialog=false" dark text ) Сохранить
+              v-btn( @click="dialog=false;loadUserItems()" dark text ) Сохранить
         v-card-text 
           div(class="d-flex flex-wrap ")
             //- preloader
@@ -75,11 +98,7 @@
                       v-overlay(v-if="_item.Slug==addedSlug" absolute :color="$store.state.themecolor")
                         v-btn( text fab x-large)
                           v-icon(class="mdi-48px") mdi-check-circle
-                        
-              
-            
-          
-        
+                  
 </template>
 
 <script>
@@ -127,28 +146,48 @@
       //   add Item to user store
       addItem(slug){
         //   let _vue = this;
-          let data = new FormData();
-          data.append('slug',slug);
-          axios.post(this.$store.state.addressprefix+'/api/adduseritem', data )
-               .then( () => { 
-                  //  console.log(res);
-                   this.addedSlug = slug;
-               } );
+        let data = new FormData();
+        data.append('slug',slug);
+        axios.post(this.$store.state.addressprefix+'/api/adduseritem', data )
+              .then( () => { 
+                //  console.log(res);
+                  this.addedSlug = slug;
+              } );
+      },
+      deleteItem(id){
+        axios.delete(this.$store.state.addressprefix+'/api/removeuseritem/'+id )
+               .then( ()=>{
+                    for ( let i=0; i<this.userItems.length; i++ ){
+                      if ( this.userItems[i].ID==id ){
+                        this.userItems.splice(i,1);
+                      }
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response)
+                });
+      },
+      // loading user items
+      loadUserItems(){
+        var _vue = this;
+        // set loader
+        _vue.loadingUser = true;
+        // load data
+        axios.get(this.$store.state.addressprefix+'/api/useritems')
+        .then( res => { 
+          _vue.userItems = res.data.Value;
+          // console.log(_vue.userItems[0].Item.Image.Path);
+          _vue.loadingUser=false;
+        } );
       }
+
       
     },
     // загружаем данные после того как перешли по ссылке
     mounted() {
       var _vue = this;
-      // set loader
-      _vue.loadingUser = true;
-      // load data
-      axios.get(this.$store.state.addressprefix+'/api/useritems')
-      .then( res => { 
-        _vue.userItems = res.data.Value;
-        // console.log(_vue.userItems[0].Item.Image.Path);
-        _vue.loadingUser=false;
-      } );
+      
+      _vue.loadUserItems();
 
        _vue.loading = true;
       axios.get(this.$store.state.addressprefix+'/api/items')

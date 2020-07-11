@@ -6,7 +6,8 @@
     h1(class="mt-2 mb-2" :class="$store.state.themecolor+'--text'") Технические средства метеоподразделения
       v-btn( to="/list" :color="$store.state.themecolor" icon large class="float-left mt-1 mr-5" )
         v-icon mdi-chevron-left
-      v-subheader(class="ml-12 relative") Для добавления ТСМ в штат подразделения выберите технику из общего списка
+      v-subheader(class="ml-12 relative ") Для добавления ТСМ в штат подразделения выберите технику из общего списка
+      v-subheader(class="ml-12 relative ")
         v-btn( @click="dialog=true" 
                     dark
                     :color="$store.state.themeaccentcolor"
@@ -16,10 +17,35 @@
                     right
                     fab)
           v-icon mdi-book-plus
+        v-btn( @click="listType=!listType" 
+                    dark
+                    :color="$store.state.themecolor"
+                    :class="listType?'accent-0':'accent-4'"
+                    absolute
+                    bottom
+                    left
+                    fab)
+          v-icon(v-show="listType") mdi-panorama
+          v-icon(v-show="!listType") mdi-table
     v-divider
-          
+    
+    div(class="d-flex offset-8 col-4" v-if="listType")
+      v-text-field( v-model="search" prepend-icon="mdi-magnify" label="Поиск..." class="mt-5 "  )
       
-    div(class="d-flex flex-wrap mt-5")
+    //- table view
+    div(class="d-flex flex-wrap mt-5" v-if="listType")
+      v-data-table(:loading="loadingUser" class="elevation-1 w-100" loading-text="Загрузка данных..."
+                    item-key="ID"
+                    :headers="headers"
+                    :items="userItems"
+                    :search="search"
+                    :footer-props="{itemsPerPageOptions:[10,20,50,100,-1]}"
+                    :items-per-page="50")
+        
+
+
+    //- catd view 
+    div(class="d-flex flex-wrap mt-5" v-if="!listType")
       //- preloader
       div(class="col-4 pa-3" v-if="loadingUser")
         v-card(  :loading="loadingUser" :disabled="loadingUser"    )
@@ -68,7 +94,7 @@
               scrollable )
       v-card( tile )
         v-toolbar( dense dark :color="$store.state.themecolor" )
-          v-btn( icon dark @click="dialog=false" )
+          v-btn( icon dark @click="dialog=false;loadUserItems()" )
             v-icon mdi-close
           v-toolbar-title Ввыберите технику из списка для добавления в штат метеоподразделения
           v-spacer
@@ -120,7 +146,26 @@
       //   open dialog to select item
       dialog:false,
       // 
-      addedSlug:''
+      addedSlug:'',
+      // тип отображения списка
+      listType:false,
+      // поиск фильтр
+      search:'',
+      // заголовки таблицы
+      headers: [
+          {
+            text: 'ID',
+            align: 'start',
+            sortable: true,
+            value: 'ID',
+          },
+          { text: 'Название', value: 'Item.Name' },
+          { text: 'Индекс', value: 'Item.Index' },
+          { text: 'Код КВТ', value: 'Item.KVT' },
+          { text: 'Дата ввода в эксплуатацию', value: 'DateStart' },
+          { text: 'Инвентарный номер', value: 'Inventory' },
+          { text: 'Примечание', value: 'Primechanie' },
+        ],
     }),
     methods:{
       // получаем индекс категории из сторейджа
@@ -203,6 +248,9 @@
 <style scoped>
   .vh-100{
     min-height: 100vh;
+  }
+  .w-100{
+    width:100%
   }
   .relative{
       position: relative;

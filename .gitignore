@@ -2,3 +2,4 @@ tcm.code-workspace
 *.db
 api/db
 api/db/tcmstorage.db
+.DS_Store

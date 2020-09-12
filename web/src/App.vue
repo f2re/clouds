@@ -4,44 +4,11 @@
     v-navigation-drawer( class="pa-4" fixed :color="$store.state.themecolor" permanent floating)
       v-list-item
         v-list-item-content
-          v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) Справочник ТСМ
+          v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) Справочник облаков
           v-list-item-subtitle( :class="$store.state.themecolor+'--text'" class="text--lighten-2" ) v{{version}}
       v-divider
 
-      v-list( dense nav )
-        v-list-item( v-for='(_m,_i) in menu' :key="_i" :to="_m.href" link  )
-          v-list-item-icon
-            v-icon( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) {{_m.icon}}
-          v-list-item-content
-            v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) {{_m.title}}
-
-          
-        v-list( dense nav class="pa-0 pl-5" )
-          v-list-item( v-for='(_m,_i) in $store.state.categories' :key="_i" :to="'/navigation/'+_m.val" link )
-            v-list-item-icon(class="mr-2")
-              v-icon( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) mdi-checkbox-blank-circle-outline
-            v-list-item-content
-              v-list-item-title( :class="$store.state.themecolor+'--text'" class="text--lighten-5" ) {{_m.text}}
-
-        v-footer( dark padless absolute  )
-          v-card( flat tile width="100%" :color="$store.state.themecolor" class="text-center"   )
-            
-            v-btn(  to="/item/add"
-                    dark
-                    :color="$store.state.themeaccentcolor"
-                    class="accent-4"
-                    absolute
-                    top
-                    right
-                    fab)
-              v-icon mdi-plus
-                
-            v-divider
-            
-            v-card-text( class="white--text" )        
-              div &copy; {{ new Date().getFullYear() }}
-
-    v-content
+    v-main
       transition(name="fade")
         router-view(:key="$route.fullPath")
     
@@ -49,37 +16,23 @@
 </template>
 
 <script>
-import Navigation from './components/Navigation';
-import List from './components/List';
 import Home from './components/Home';
-import Item from './components/Item';
-
-
 
 export default {
   name: 'App',
   components: {
     Home,
-    List,
-    Navigation,
-    Item,
   },
 
   data: () => ({
     
-    version: '0.3',
+    version: '0.1',
     
     // menu
     menu:[
       { "title": 'Главная',
         "href" : '/',
         "icon" : "mdi-home" },
-      { "title": 'ТСМ метеоподразделения',
-        "href" : '/user',
-        "icon" : "mdi-account-circle" },
-      { "title": 'Список ТСМ',
-        "href" : '/list',
-        "icon" : "mdi-view-list" },
     ]
 
   }),

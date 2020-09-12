@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "tcm",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -55,5 +55,9 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "main": "babel.config.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
